@@ -1,0 +1,324 @@
+/* Base container for the entire video meeting */
+.meetVideoContainer {
+    position: relative;
+    height: 100vh;
+    width: 100vw; /* Ensure it takes full width */
+    background: linear-gradient(to bottom right, #000428, #004e92); /* Dark, appealing gradient */
+    display: flex; /* Use flexbox for overall layout */
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: space-between; /* Push controls to bottom */
+    align-items: center;
+    overflow: hidden; /* Hide overflow from dynamic elements */
+}
+
+/* Local user's video (picture-in-picture style) */
+.meetUserVideo {
+    position: absolute; /* Keep it positioned */
+    top: 20px; /* Adjust from bottom to top for common PIP placement */
+    right: 20px; /* Position on the top-right corner */
+    height: 180px; /* Fixed height for consistent PIP size */
+    width: 240px; /* Fixed width for 4:3 or 16:9 aspect */
+    border-radius: 12px; /* Smoother corners */
+    border: 3px solid rgba(255, 255, 255, 0.3); /* Subtle white border */
+    object-fit: cover; /* Ensure video covers the element */
+    z-index: 10; /* Ensure it's above other videos */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Add subtle shadow */
+}
+
+/* Control buttons container */
+.buttonContainers {
+    position: absolute;
+    bottom: 20px; /* Slightly off the bottom edge */
+    width: fit-content; /* Only take space needed by buttons */
+    padding: 15px 30px; /* More padding */
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+    border-radius: 50px; /* Pill shape */
+    display: flex;
+    gap: 20px; /* Space out buttons */
+    justify-content: center;
+    align-items: center;
+    z-index: 20; /* Ensure controls are on top */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+.buttonContainers svg {
+    font-size: 2.5rem; /* Slightly smaller, more refined icons */
+    color: white; /* Ensure icons are white */
+}
+
+/* Individual button styles on hover/active */
+.buttonContainers .MuiIconButton-root {
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.1); /* Slight background for buttons */
+}
+
+.buttonContainers .MuiIconButton-root:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.buttonContainers .MuiIconButton-root:active {
+    transform: translateY(1px); /* Press effect */
+}
+
+/* Specific red color for end call button */
+.buttonContainers .MuiIconButton-root[style*="red"] {
+    background-color: #f44336; /* Red background for end call */
+}
+
+.buttonContainers .MuiIconButton-root[style*="red"]:hover {
+    background-color: #d32f2f;
+}
+
+/* Main conference view for participant videos */
+.conferenceView {
+    flex-grow: 1; /* Take up available vertical space */
+    width: calc(100vw - 40px); /* Adjust for horizontal padding */
+    display: flex;
+    flex-wrap: wrap; /* Allow videos to wrap to next line */
+    justify-content: center; /* Center videos horizontally */
+    align-content: center; /* Center rows vertically */
+    gap: 15px; /* More consistent gap */
+    padding: 20px; /* Overall padding */
+    max-height: calc(100vh - 250px); /* Adjust max height considering controls and local video */
+    overflow-y: auto; /* Allow scrolling if many users */
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+/* Dynamic sizing for participant videos */
+.conferenceView video {
+    flex-grow: 1; /* Allow videos to grow */
+    min-width: 280px; /* Minimum width for readability */
+    max-width: 400px; /* Max width to prevent too large videos */
+    height: 250px; /* Fixed height for consistent presentation */
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    object-fit: cover;
+    background-color: #1a1a1a; /* Placeholder background */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.conferenceView video:hover {
+    transform: scale(1.02); /* Slight zoom on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Chat Room */
+.chatRoom {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh; /* Take full height */
+    width: 350px; /* Fixed width for chat */
+    background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    z-index: 30; /* Ensure chat is on top */
+    transform: translateX(100%); /* Initially off-screen */
+    animation: slideInChat 0.3s forwards ease-out; /* Animation for showing */
+}
+
+/* Animation for chat slide-in */
+@keyframes slideInChat {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.chatRoom.hidden { /* To hide it, you would add a 'hidden' class */
+    animation: slideOutChat 0.3s forwards ease-in;
+}
+
+@keyframes slideOutChat {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+
+.chatContainer {
+    flex-grow: 1; /* Allow chat messages to take available space */
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.chatContainer h1 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.chattingDisplay {
+    flex-grow: 1; /* Allow messages to scroll */
+    overflow-y: auto; /* Enable scrolling for messages */
+    padding-right: 10px; /* Space for scrollbar */
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    gap: 10px; /* Space between messages */
+}
+
+.chattingDisplay div {
+    background-color: #e0e0e0; /* Light background for message bubbles */
+    padding: 8px 12px;
+    border-radius: 15px;
+    align-self: flex-start; /* Default for general messages */
+    max-width: 80%; /* Prevent messages from taking full width */
+    word-wrap: break-word; /* Ensure long words wrap */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chattingDisplay div p:first-child { /* Sender name */
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 3px;
+    font-size: 0.9em;
+}
+
+.chattingDisplay div p:last-child { /* Message content */
+    color: #333;
+    margin: 0;
+}
+
+/* Style for messages sent by the current user */
+.chattingDisplay div.myMessage {
+    background-color: #d1e7dd; /* A distinct color for own messages */
+    align-self: flex-end; /* Align to the right */
+    border-bottom-right-radius: 3px; /* Slightly different corner for own messages */
+    border-top-right-radius: 15px;
+}
+
+.chattingArea {
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.chattingArea .MuiTextField-root {
+    flex-grow: 1; /* Text field takes most space */
+}
+
+/* Lobby Styling */
+.lobbyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #1a2a6c, #b21f1f, #fdbb2d); /* More vibrant gradient for lobby */
+    color: white;
+    text-align: center;
+}
+
+.lobbyContainer h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.lobbyContainer .MuiTextField-root {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+.lobbyContainer .MuiInputLabel-root {
+    color: #333 !important;
+}
+
+.lobbyContainer .MuiInputBase-input {
+    color: #333 !important;
+}
+
+.lobbyContainer .MuiOutlinedInput-notchedOutline {
+    border-color: transparent !important;
+}
+
+.lobbyContainer .MuiButton-contained {
+    background-color: #4CAF50; /* Green connect button */
+    color: white;
+    padding: 10px 30px;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.lobbyContainer .MuiButton-contained:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .meetUserVideo {
+        height: 120px;
+        width: 160px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .buttonContainers {
+        gap: 10px;
+        padding: 10px 20px;
+        bottom: 10px;
+        width: 90vw;
+    }
+
+    .buttonContainers svg {
+        font-size: 2rem;
+    }
+
+    .conferenceView {
+        padding: 10px;
+        gap: 10px;
+        max-height: calc(100vh - 180px); /* Adjust max height for smaller screens */
+    }
+
+    .conferenceView video {
+        min-width: unset; /* Remove min-width to allow more flexibility */
+        max-width: 100%; /* Allow videos to take full width if needed */
+        height: 180px; /* Adjust height */
+    }
+
+    .chatRoom {
+        width: 100vw; /* Full width on smaller screens */
+        transform: translateX(100%);
+        animation: slideInChatMobile 0.3s forwards ease-out;
+    }
+    @keyframes slideInChatMobile {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+    }
+    .chatRoom.hidden {
+        animation: slideOutChatMobile 0.3s forwards ease-in;
+    }
+    @keyframes slideOutChatMobile {
+        from { transform: translateX(0); }
+        to { transform: translateX(100%); }
+    }
+    
+    .chattingArea {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .chattingArea .MuiButton-contained {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .lobbyContainer h2 {
+        font-size: 2rem;
+    }
+    .lobbyContainer .MuiTextField-root {
+        width: 80%;
+    }
+}
